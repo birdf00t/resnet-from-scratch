@@ -1,12 +1,15 @@
 from weight_layer import weight_layer 
 from conv import Conv2d
+import torch.nn as nn
 
-class residualBlock:
+
+class residualBlock(nn.Module):
     def __init__(self,in_ch, out_ch, stride=1):
+        super().__init__()
         self.wl1 = weight_layer(in_ch,out_ch,stride=stride)
         self.wl2 = weight_layer(out_ch,out_ch)
         if in_ch != out_ch:
-            self.shortcut = Conv2d(in_ch, out_ch, kernel_size=1,stride=stride)
+            self.shortcut = nn.Conv2d(in_ch, out_ch, kernel_size=1,stride=stride)
         else:
             self.shortcut = None 
 

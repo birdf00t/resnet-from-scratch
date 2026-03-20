@@ -1,14 +1,14 @@
 import conv
 import BN
 import torch
+import torch.nn as nn
 
-class weight_layer:
+
+class weight_layer(nn.Module):
     def __init__(self,in_channel, out_channel,stride=1):
-        self.conv =conv.Conv2d(in_channel,out_channel,stride=stride)
-        self.bn = BN.BN()
+        super().__init__()
+        self.conv =nn.Conv2d(in_channel,out_channel,kernel_size=3,stride=stride,padding=1,bias=False)
+        self.bn = nn.BatchNorm2d(out_channel)
 
     def forward(self, x):
-        output =self.conv.forward(x,padding=1)
-        output = self.bn.norm(output)
-        output = torch.relu(output)
-        return output
+        return nn.functional.relu(self.bn(self.conv(x)))
