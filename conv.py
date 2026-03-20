@@ -2,18 +2,19 @@ import torch
 import torch.nn.functional as F
 
 class Conv2d:
-    def __init__(self, in_channels, out_channels, kernel_size=3):
+    def __init__(self, in_channels, out_channels, kernel_size=3, stride=1):
+        self.stride = stride
         self.kernel_size = kernel_size
         self.in_channels=in_channels
         self.out_channels = out_channels
         self.weight = torch.randn(out_channels, in_channels, kernel_size, kernel_size)
         
 
-    def forward(self,x, padding=0,stride =1):
+    def forward(self,x, padding=0):
         x = self.pad2d(x,padding=padding)
-        self.height_out = int((x.shape[2] - self.kernel_size)/stride + 1)
-        self.width_out = int((x.shape[3] - self.kernel_size)/stride + 1)
-        return self.im2col(x,stride)
+        self.height_out = int((x.shape[2] - self.kernel_size)/self.stride + 1)
+        self.width_out = int((x.shape[3] - self.kernel_size)/self.stride + 1)
+        return self.im2col(x,self.stride)
 
 
     def pad2d(self,x,padding):
